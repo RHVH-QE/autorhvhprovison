@@ -43,6 +43,9 @@ autopart --type=thinp
 
 ### Post deal ###
 %post --erroronfail
+
+{{.PostScript03}}
+
 imgbase layout --init
 
 {{.PostScript01}}

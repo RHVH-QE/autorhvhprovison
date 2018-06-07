@@ -35,10 +35,12 @@ type (
 
 	// Machine is
 	Machine struct {
-		BkrName string `bson:"bkr_name"`
-		NicName string `bson:"nic_name"`
-		Mac     string `bson:"mac"`
-		Used    bool   `bson:"used"`
+		BkrName   string `bson:"bkr_name"`
+		NicName   string `bson:"nic_name"`
+		Mac       string `bson:"mac"`
+		Used      bool   `bson:"used"`
+		IdracUser string `bson:"idrac_user"`
+		IdracPass string `bson:"idrac_pass"`
 	}
 
 	// AutoConfig is

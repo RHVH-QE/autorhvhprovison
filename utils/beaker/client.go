@@ -1,5 +1,7 @@
 package beaker
 
+// this packag is dereacated, use power package if possible
+
 import (
 	"os/exec"
 

@@ -9,10 +9,10 @@ import (
 )
 
 const (
-	mongoURL = ""
-	mongoDB  = ""
-	ip       = ""
-	port     = ""
+	mongoURL = "mongodb://rhvhauto:rhvhauto@10.66.8.175:27017/rhvh_auto_config"
+	mongoDB  = "rhvh_auto_config"
+	ip       = "10.66.8.150"
+	port     = "3000"
 )
 
 func main() {

@@ -15,7 +15,12 @@ text
 reboot
 
 %post --erroronfail
+
+{{.PostScript03}}
+
 imgbase layout --init
+
 {{.PostScript01}}
 {{.PostScript02}}
+
 %end

@@ -18,6 +18,15 @@ curl -s http://%s:%s/api/v1/provision/done/$EM1IP/%s`
 EM1IP=$(ip -4 a show | awk -F " " '/inet/ { if (match($2, /^10.*/)) print $2 }' | awk -F "/" '{print $1}')
 curl -s http://%s:%s/api/v1/provision/done/$EM1IP/%s`
 
+	postScript03 = `
+firewall-offline-cmd --add-port=8090/tcp
+mkdir -m0700 /root/.ssh/
+cat <<EOF >/root/.ssh/authorized_keys
+%s
+EOF
+chmod 0600 /root/.ssh/authorized_keys
+restorecon -R /root/.ssh/`
+
 	ksTplPath  = "static/tpl/"
 	ksAutoPath = "static/"
 )
@@ -27,10 +36,11 @@ type KsParams struct {
 	LiveImgURL   string
 	PostScript01 string
 	PostScript02 string
+	PostScript03 string
 }
 
 // ParseKickstarts is
-func ParseKickstarts(ksName, imgURL, ip, port, bkrName string) {
+func ParseKickstarts(ksName, imgURL, ip, port, bkrName, sshPK string) {
 	tpl, err := template.ParseFiles(ksTplPath + ksName)
 	if err != nil {
 		log.Error(err)
@@ -41,7 +51,15 @@ func ParseKickstarts(ksName, imgURL, ip, port, bkrName string) {
 	}
 	defer fp.Close()
 	if strings.Contains(ksName, "atv_bonda") {
-		ksParams := KsParams{imgURL, fmt.Sprintf(postScript02, ip, port, bkrName), ""}
+		ksParams := KsParams{imgURL, "", fmt.Sprintf(postScript02, ip, port, bkrName), ""}
+		tpl.Execute(fp, ksParams)
+	} else {
+		ksParams := KsParams{
+			imgURL,
+			fmt.Sprintf(postScript01, ip, port, bkrName),
+			"",
+			fmt.Sprintf(postScript03, sshPK)}
+		// log.Warn(ksParams)
 		tpl.Execute(fp, ksParams)
 	}
 }
